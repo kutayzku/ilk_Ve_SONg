@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>İlk Ve SONg | Müzik</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome İkonları -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Archivo+Black&display=swap&subset=latin-ext" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #050505;
+            color: #e2e8f0;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1, h2, h3 { font-family: 'Archivo Black', sans-serif; }
+
+        /* --- CANVAS ARKA PLAN --- */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: #050505; /* Canvas yüklenmezse zemin rengi */
+        }
+
+        /* --- DÖNEN RENKLİ ŞERİT (YENİ ŞARKI İÇİN) --- */
+        .rotating-border-wrapper {
+            position: relative;
+            border-radius: 1.5rem; 
+            overflow: hidden;
+            padding: 3px; 
+            box-shadow: 0 0 25px rgba(210, 232, 35, 0.15); 
+        }
+
+        .rotating-border-wrapper::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: conic-gradient(
+                transparent, 
+                #D2E823, 
+                #ff0055, 
+                #8A2BE2,
+                #D2E823, 
+                transparent
+            );
+            animation: rotate-border 4s linear infinite;
+        }
+
+        @keyframes rotate-border {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hero-preview {
+            position: relative;
+            background-image: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(18, 2, 2, 0.95)), url('https://lh3.googleusercontent.com/dYeW5NjtGcarXEIJx-PyqBsg2VSg-Mnww8mZzzxxjUqwL8hA8RxyvG106r-vEiYEFU6JlEsFkj4-MQB7=w544-h544-l90-rj');
+            background-size: cover;
+            background-position: center;
+            border-radius: 1.3rem; 
+            height: 100%;
+            width: 100%;
+            z-index: 1; 
+        }
+
+        /* Glassmorphism */
+        .glass-card {
+            background: rgba(20, 20, 20, 0.4); /* Biraz daha koyu zemin */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease, background 0.3s ease;
+        }
+        .glass-card:active { transform: scale(0.96); background: rgba(255, 255, 255, 0.1); }
+
+        /* Modal Stilleri */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 50;
+            opacity: 0; visibility: hidden;
+            transition: all 0.3s ease;
+            display: flex; align-items: flex-end;
+            justify-content: center;
+        }
+        @media (min-width: 640px) { .modal-overlay { align-items: center; } }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+
+        .modal-content {
+            background: #1a1a1a;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+            width: 100%;
+            border-radius: 24px 24px 0 0;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        @media (min-width: 640px) {
+            .modal-content { width: auto; min-width: 380px; border-radius: 24px; transform: translateY(20px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        }
+        .modal-overlay.active .modal-content { transform: translateY(0); }
+
+        /* Platform Butonları */
+        .platform-btn {
+            display: flex; align-items: center; justify-content: center;
+            gap: 10px; width: 100%; padding: 16px;
+            border-radius: 16px; font-weight: 600; font-size: 15px;
+            transition: transform 0.2s;
+        }
+        .platform-btn:active { transform: scale(0.98); opacity: 0.9; }
+        
+        .btn-spotify { background: #1DB954; color: black; }
+        .btn-apple { background: #FA243C; color: white; }
+        .btn-youtube { background: #FF0000; color: white; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- CANVAS ARKA PLAN -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Header -->
+    <header class="pt-10 pb-6 text-center px-4 animate-fade-in-down relative z-10">
+        <div class="w-28 h-28 mx-auto rounded-full p-1 border-2 border-white/20 mb-5 shadow-2xl overflow-hidden backdrop-blur-sm bg-white/5">
+            <img src="https://ugc.production.linktr.ee/316f67df-006a-4f97-9065-f792d5ae41ab_Logo--VS.jpeg" class="w-full h-full object-cover rounded-full">
+        </div>
+        <h1 class="text-3xl lg:text-4xl font-bold text-white mb-3 tracking-wide drop-shadow-md">İlk Ve SONg</h1>
+        <p class="text-sm text-gray-300 max-w-xs mx-auto font-light leading-relaxed opacity-90">
+            Şarkı yazmaya ilgi duyuyordum. Suno.AI ve duygularımla hazırladım. 12 şarkı ürettim.
+        </p>
+        
+        <!-- Sosyal Medya -->
+        <div class="flex gap-6 justify-center mt-6 text-2xl">
+            <a href="https://instagram.com/kutay_aydemirr" target="_blank" class="text-gray-400 hover:text-[#E1306C] transition active:scale-90"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.youtube.com/@%C4%B0lkVeSONg" target="_blank" class="text-gray-400 hover:text-[#FF0000] transition active:scale-90"><i class="fab fa-youtube"></i></a>
+            <a href="https://open.spotify.com/intl-tr/artist/3CoY9uZDaTpPVqgIPWkznE" target="_blank" class="text-gray-400 hover:text-[#1DB954] transition active:scale-90"><i class="fab fa-spotify"></i></a>
+            <a href="https://music.apple.com/tr/artist/i-lk-ve-song/1819947370" target="_blank" class="text-gray-400 hover:text-[#FA243C] transition active:scale-90"><i class="fab fa-apple"></i></a>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto px-4 pb-20 max-w-lg space-y-10 relative z-10">
+        
+        <!-- HERO CARD (YENİ - DÖNEN ŞERİTLİ) -->
+        <div class="rotating-border-wrapper aspect-[4/3] w-full shadow-2xl cursor-pointer active:scale-[0.98] transition duration-200" onclick="openModal(0)">
+            <div class="hero-preview group overflow-hidden">
+                <div class="absolute top-4 left-4 bg-red-600/90 backdrop-blur-md text-white text-[10px] font-bold px-3 py-1.5 rounded-full shadow-lg z-10 animate-pulse border border-white/20 tracking-wider">
+                    YENİ ÇIKTI
+                </div>
+                
+                <div class="absolute bottom-0 left-0 w-full p-6 text-left z-10">
+                    <h2 class="text-3xl lg:text-4xl text-white mb-2 drop-shadow-xl leading-none font-bold">Sessizlikten<br>Güç Alan</h2>
+                    <p class="text-gray-300 text-sm font-medium mb-5">Yeni Single</p>
+                    <button class="bg-[#D2E823] text-black font-bold py-3.5 px-8 rounded-full flex items-center gap-2 transition shadow-lg shadow-[#d2e823]/20 text-sm">
+                        <i class="fas fa-play text-xs"></i> DİNLE
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MY MUSIC SECTION -->
+        <div>
+            <h3 class="text-white text-lg font-bold mb-4 flex items-center pl-1">
+                <i class="fas fa-music text-[#D2E823] mr-2.5"></i> My Music
+            </h3>
+            
+            <div class="grid grid-cols-2 gap-4">
+                
+                <!-- Anahtar -->
+                <div onclick="openModal(1)" class="glass-card rounded-2xl p-3 cursor-pointer group flex flex-col h-full">
+                    <div class="aspect-square rounded-xl overflow-hidden mb-3 relative bg-slate-800 shadow-lg">
+                        <img src="https://lh3.googleusercontent.com/gRxDFTYvaBtru6OS8l4NjbyBKv6NtGUIvuOU-XrIu01fkcMVgVZNU4eXEAIbYgCZrk17pWXWyGJGPxA=w544-h544-l90-rj" 
+                             class="w-full h-full object-cover" 
+                             referrerpolicy="no-referrer"
+                             onerror="this.src='https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=1000&auto=format&fit=crop'">
+                    </div>
+                    <div class="mt-auto">
+                        <h4 class="text-white font-bold text-sm truncate leading-tight">Anahtar</h4>
+                        <p class="text-[11px] text-gray-400 mt-1">Single</p>
+                    </div>
+                </div>
+
+                <!-- BUL-AMAÇ -->
+                <div onclick="openModal(2)" class="glass-card rounded-2xl p-3 cursor-pointer group flex flex-col h-full">
+                    <div class="aspect-square rounded-xl overflow-hidden mb-3 relative bg-slate-800 shadow-lg">
+                        <img src="https://lh3.googleusercontent.com/8RBj1GgAUioFU4w-A8vQkoNuX4-LGK5dqLs_PbvX52_EL4_uxl1ASEW_H6t-JsbSWDC_8lxk7b6jxSiN=w544-h544-l90-rj" 
+                             class="w-full h-full object-cover"
+                             referrerpolicy="no-referrer"
+                             onerror="this.src='https://images.unsplash.com/photo-1619983081563-430f63602796?q=80&w=1000&auto=format&fit=crop'">
+                    </div>
+                    <div class="mt-auto">
+                        <h4 class="text-white font-bold text-sm truncate leading-tight">BUL-AMAÇ</h4>
+                        <p class="text-[11px] text-gray-400 mt-1">Albüm (10 Şarkı)</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- PODCAST SECTION -->
+        <div>
+            <h3 class="text-white text-lg font-bold mb-4 flex items-center pl-1">
+                <i class="fas fa-podcast text-purple-400 mr-2.5"></i> Podcast
+            </h3>
+
+            <div onclick="openModal(3)" class="glass-card rounded-2xl p-3.5 cursor-pointer group flex items-center gap-4 active:scale-[0.99]">
+                <div class="w-16 h-16 flex-shrink-0 rounded-xl overflow-hidden bg-slate-800 shadow-md">
+                    <img src="https://ugc.production.linktr.ee/09d11c81-8568-4206-afb8-164f914ccff9_ab6765630000ba8a742729d7e16ead736b1d7087.jpeg" class="w-full h-full object-cover">
+                </div>
+                <div class="flex-grow min-w-0">
+                    <h4 class="text-white font-bold text-sm truncate">AI & Music Podcast</h4>
+                    <p class="text-xs text-gray-400 mt-0.5">Konuk Bölüm</p>
+                </div>
+                <div class="pr-2 text-gray-500">
+                    <i class="fas fa-chevron-right text-sm"></i>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- MOBİL UYUMLU MODAL -->
+    <div id="music-modal" class="modal-overlay" onclick="closeModal(event)">
+        <div class="modal-content p-6 pb-10 text-center relative shadow-2xl" onclick="event.stopPropagation()">
+            
+            <div class="w-12 h-1.5 bg-white/20 rounded-full mx-auto mb-6"></div>
+            
+            <button onclick="closeModalDirect()" class="absolute top-5 right-5 w-8 h-8 bg-white/5 rounded-full text-gray-400 hover:text-white flex items-center justify-center active:bg-white/10">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <div class="w-36 h-36 mx-auto rounded-2xl shadow-2xl overflow-hidden mb-5 border border-white/10 relative bg-slate-800">
+                <img id="modal-img" src="" class="w-full h-full object-cover" referrerpolicy="no-referrer">
+            </div>
+            
+            <h3 id="modal-title" class="text-2xl font-bold text-white mb-1 leading-tight">Şarkı Adı</h3>
+            <p id="modal-type" class="text-xs text-[#D2E823] uppercase tracking-widest mb-8 font-bold opacity-80">Single</p>
+
+            <div class="space-y-3" id="modal-links">
+                <!-- Butonlar JS -->
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="text-center text-gray-600 text-[10px] py-6 mb-safe relative z-10">
+        &copy; 2025 İlk Ve SONg
+    </footer>
+
+    <script>
+        // --- CANVAS ARKA PLAN ANİMASYONU ---
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        let width, height;
+        let waves = [];
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            initWaves();
+        }
+
+        class Wave {
+            constructor(y, color, amplitude, frequency, speed) {
+                this.y = y;
+                this.color = color;
+                this.amplitude = amplitude;
+                this.frequency = frequency;
+                this.speed = speed;
+                this.offset = Math.random() * 100;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.moveTo(0, this.y);
+                for (let i = 0; i < width; i++) {
+                    ctx.lineTo(i, this.y + Math.sin(i * this.frequency + this.offset) * this.amplitude * Math.sin(this.offset * 0.1));
+                }
+                ctx.strokeStyle = this.color;
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+                this.offset += this.speed;
+            }
+        }
+
+        function initWaves() {
+            waves = [];
+            // Site renklerine uygun dalgalar
+            const colors = [
+                'rgba(210, 232, 35, 0.2)',  // Neon Sarı
+                'rgba(255, 0, 85, 0.2)',    // Kırmızı
+                'rgba(138, 43, 226, 0.2)',  // Mor
+                'rgba(210, 232, 35, 0.1)',  // Sarı (İnce)
+                'rgba(255, 0, 85, 0.1)'     // Kırmızı (İnce)
+            ];
+
+            const totalWaves = 12; // Dalga sayısı
+            const step = height / totalWaves;
+
+            for (let i = 0; i < totalWaves; i++) {
+                waves.push(new Wave(
+                    i * step + 50, // Y pozisyonu
+                    colors[i % colors.length], // Renk
+                    Math.random() * 80 + 20, // Genlik (Dalga yüksekliği)
+                    Math.random() * 0.003 + 0.001, // Frekans (Sıklık)
+                    Math.random() * 0.02 + 0.01 // Hız
+                ));
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            // Hafif iz bırakmak için (isteğe bağlı)
+            // ctx.fillStyle = 'rgba(5, 5, 5, 0.1)';
+            // ctx.fillRect(0, 0, width, height);
+            
+            waves.forEach(wave => wave.draw());
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+        animate();
+
+
+        // --- VERİLER ---
+        const content = [
+            {
+                // ID: 0 (Preview Alanı)
+                title: "Sessizlikten Güç Alan",
+                type: "Yeni Single",
+                image: "https://lh3.googleusercontent.com/dYeW5NjtGcarXEIJx-PyqBsg2VSg-Mnww8mZzzxxjUqwL8hA8RxyvG106r-vEiYEFU6JlEsFkj4-MQB7=w544-h544-l90-rj",
+                links: [
+                    { name: "YouTube Music", url: "https://music.youtube.com/playlist?list=OLAK5uy_lNSEOQHCtIB3tUA5tXuKICjLdJGhO91tA", class: "btn-youtube", icon: "youtube" },
+                    { name: "Spotify", url: "https://open.spotify.com/intl-tr/track/40IzPGoIP4zELUaOy2N4vk?si=b547799f7b4948c2", class: "btn-spotify", icon: "spotify" },
+                    { name: "Apple Music", url: "https://music.apple.com/tr/song/sessizlikten-g%C3%BC%C3%A7-alan/1865161374", class: "btn-apple", icon: "apple" }
+                ]
+            },
+            {
+                // ID: 1
+                title: "Anahtar",
+                type: "Single",
+                image: "https://lh3.googleusercontent.com/gRxDFTYvaBtru6OS8l4NjbyBKv6NtGUIvuOU-XrIu01fkcMVgVZNU4eXEAIbYgCZrk17pWXWyGJGPxA=w544-h544-l90-rj",
+                links: [
+                    { name: "YouTube Music", url: "https://music.youtube.com/watch?v=4kzQy3QlP6k", class: "btn-youtube", icon: "youtube" },
+                    { name: "Spotify", url: "https://open.spotify.com/track/1kI2Ep4LzOQZfydsCv72vS", class: "btn-spotify", icon: "spotify" },
+                    { name: "Apple Music", url: "https://music.apple.com/us/song/anahtar/1823520726", class: "btn-apple", icon: "apple" }
+                ]
+            },
+            {
+                // ID: 2
+                title: "BUL-AMAÇ",
+                type: "Albüm",
+                image: "https://lh3.googleusercontent.com/8RBj1GgAUioFU4w-A8vQkoNuX4-LGK5dqLs_PbvX52_EL4_uxl1ASEW_H6t-JsbSWDC_8lxk7b6jxSiN=w544-h544-l90-rj",
+                links: [
+                    { name: "YouTube Music", url: "https://music.youtube.com/playlist?list=OLAK5uy_mnO_MDpMNji2mcxd3-OxNgkbuDgbl7Zms", class: "btn-youtube", icon: "youtube" },
+                    { name: "Spotify", url: "https://open.spotify.com/intl-tr/album/2D9GUljPVt5I4N3tnJDh0L", class: "btn-spotify", icon: "spotify" },
+                    { name: "Apple Music", url: "https://music.apple.com/us/album/bul-amaç/1820238840", class: "btn-apple", icon: "apple" }
+                ]
+            },
+            {
+                // ID: 3
+                title: "AI & Music",
+                type: "Podcast",
+                image: "https://ugc.production.linktr.ee/09d11c81-8568-4206-afb8-164f914ccff9_ab6765630000ba8a742729d7e16ead736b1d7087.jpeg",
+                links: [
+                    { name: "Spotify'da Dinle", url: "https://open.spotify.com/episode/47ZGg9QMk4IOdYR7OtHZlO", class: "btn-spotify", icon: "spotify" }
+                ]
+            }
+        ];
+
+        // --- FONKSİYONLAR ---
+        const modal = document.getElementById('music-modal');
+        const modalImg = document.getElementById('modal-img');
+        const modalTitle = document.getElementById('modal-title');
+        const modalType = document.getElementById('modal-type');
+        const modalLinks = document.getElementById('modal-links');
+
+        function openModal(index) {
+            const item = content[index];
+            modalImg.src = item.image;
+            modalImg.setAttribute('referrerpolicy', 'no-referrer');
+            modalImg.onerror = function() {
+                this.src = 'https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=1000&auto=format&fit=crop';
+            };
+
+            modalTitle.textContent = item.title;
+            modalType.textContent = item.type;
+            
+            modalLinks.innerHTML = item.links.map(link => `
+                <a href="${link.url}" target="_blank" class="platform-btn ${link.class}">
+                    <i class="fab fa-${link.icon} text-lg"></i> ${link.name}
+                </a>
+            `).join('');
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; 
+        }
+
+        function closeModal(e) {
+            if (e.target === modal) {
+                closeModalDirect();
+            }
+        }
+
+        function closeModalDirect() {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    </script>
+</body>
+</html>
