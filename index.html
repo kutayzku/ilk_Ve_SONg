@@ -35,7 +35,7 @@
             width: 100%;
             height: 100%;
             z-index: -1;
-            background: #050505; /* Canvas yüklenmezse zemin rengi */
+            background: #050505;
         }
 
         /* --- DÖNEN RENKLİ ŞERİT (YENİ ŞARKI İÇİN) --- */
@@ -69,7 +69,8 @@
 
         .hero-preview {
             position: relative;
-            background-image: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(18, 2, 2, 0.95)), url('https://lh3.googleusercontent.com/dYeW5NjtGcarXEIJx-PyqBsg2VSg-Mnww8mZzzxxjUqwL8hA8RxyvG106r-vEiYEFU6JlEsFkj4-MQB7=w544-h544-l90-rj');
+            /* Placeholder: Bataklığın Aynası temalı karanlık bir görsel */
+            background-image: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(18, 2, 2, 0.95)), url('https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/72/7a/42/727a42c6-3b97-3d3c-44e3-0d48aaec3c94/artwork.jpg/316x316bb.webp');
             background-size: cover;
             background-position: center;
             border-radius: 1.3rem; 
@@ -80,7 +81,7 @@
 
         /* Glassmorphism */
         .glass-card {
-            background: rgba(20, 20, 20, 0.4); /* Biraz daha koyu zemin */
+            background: rgba(20, 20, 20, 0.4);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -143,7 +144,7 @@
         </div>
         <h1 class="text-3xl lg:text-4xl font-bold text-white mb-3 tracking-wide drop-shadow-md">İlk Ve SONg</h1>
         <p class="text-sm text-gray-300 max-w-xs mx-auto font-light leading-relaxed opacity-90">
-            Şarkı yazmaya ilgi duyuyordum. Suno.AI ve duygularımla hazırladım. 12 şarkı ürettim.
+            Şarkı yazmaya ilgi duyuyordum. Suno.AI ve duygularımla hazırladım. 13 şarkı ürettim. Şarkılarımı farklı platformlardan dinleyebilirsiniz.
         </p>
         
         <!-- Sosyal Medya -->
@@ -157,7 +158,7 @@
 
     <main class="flex-grow container mx-auto px-4 pb-20 max-w-lg space-y-10 relative z-10">
         
-        <!-- HERO CARD (YENİ - DÖNEN ŞERİTLİ) -->
+        <!-- HERO CARD (YENİ - Bataklığın Aynası) -->
         <div class="rotating-border-wrapper aspect-[4/3] w-full shadow-2xl cursor-pointer active:scale-[0.98] transition duration-200" onclick="openModal(0)">
             <div class="hero-preview group overflow-hidden">
                 <div class="absolute top-4 left-4 bg-red-600/90 backdrop-blur-md text-white text-[10px] font-bold px-3 py-1.5 rounded-full shadow-lg z-10 animate-pulse border border-white/20 tracking-wider">
@@ -165,7 +166,7 @@
                 </div>
                 
                 <div class="absolute bottom-0 left-0 w-full p-6 text-left z-10">
-                    <h2 class="text-3xl lg:text-4xl text-white mb-2 drop-shadow-xl leading-none font-bold">Sessizlikten<br>Güç Alan</h2>
+                    <h2 class="text-3xl lg:text-4xl text-white mb-2 drop-shadow-xl leading-none font-bold">Bataklığın<br>Aynası</h2>
                     <p class="text-gray-300 text-sm font-medium mb-5">Yeni Single</p>
                     <button class="bg-[#D2E823] text-black font-bold py-3.5 px-8 rounded-full flex items-center gap-2 transition shadow-lg shadow-[#d2e823]/20 text-sm">
                         <i class="fas fa-play text-xs"></i> DİNLE
@@ -182,13 +183,25 @@
             
             <div class="grid grid-cols-2 gap-4">
                 
-                <!-- Anahtar -->
+                <!-- Sessizlikten Güç Alan -->
                 <div onclick="openModal(1)" class="glass-card rounded-2xl p-3 cursor-pointer group flex flex-col h-full">
+                    <div class="aspect-square rounded-xl overflow-hidden mb-3 relative bg-slate-800 shadow-lg">
+                        <img src="https://lh3.googleusercontent.com/dYeW5NjtGcarXEIJx-PyqBsg2VSg-Mnww8mZzzxxjUqwL8hA8RxyvG106r-vEiYEFU6JlEsFkj4-MQB7=w544-h544-l90-rj" 
+                             class="w-full h-full object-cover" 
+                             referrerpolicy="no-referrer">
+                    </div>
+                    <div class="mt-auto">
+                        <h4 class="text-white font-bold text-sm truncate leading-tight">Sessizlikten Güç Alan</h4>
+                        <p class="text-[11px] text-gray-400 mt-1">Single</p>
+                    </div>
+                </div>
+
+                <!-- Anahtar -->
+                <div onclick="openModal(2)" class="glass-card rounded-2xl p-3 cursor-pointer group flex flex-col h-full">
                     <div class="aspect-square rounded-xl overflow-hidden mb-3 relative bg-slate-800 shadow-lg">
                         <img src="https://lh3.googleusercontent.com/gRxDFTYvaBtru6OS8l4NjbyBKv6NtGUIvuOU-XrIu01fkcMVgVZNU4eXEAIbYgCZrk17pWXWyGJGPxA=w544-h544-l90-rj" 
                              class="w-full h-full object-cover" 
-                             referrerpolicy="no-referrer"
-                             onerror="this.src='https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=1000&auto=format&fit=crop'">
+                             referrerpolicy="no-referrer">
                     </div>
                     <div class="mt-auto">
                         <h4 class="text-white font-bold text-sm truncate leading-tight">Anahtar</h4>
@@ -196,17 +209,18 @@
                     </div>
                 </div>
 
-                <!-- BUL-AMAÇ -->
-                <div onclick="openModal(2)" class="glass-card rounded-2xl p-3 cursor-pointer group flex flex-col h-full">
-                    <div class="aspect-square rounded-xl overflow-hidden mb-3 relative bg-slate-800 shadow-lg">
-                        <img src="https://lh3.googleusercontent.com/8RBj1GgAUioFU4w-A8vQkoNuX4-LGK5dqLs_PbvX52_EL4_uxl1ASEW_H6t-JsbSWDC_8lxk7b6jxSiN=w544-h544-l90-rj" 
-                             class="w-full h-full object-cover"
-                             referrerpolicy="no-referrer"
-                             onerror="this.src='https://images.unsplash.com/photo-1619983081563-430f63602796?q=80&w=1000&auto=format&fit=crop'">
-                    </div>
-                    <div class="mt-auto">
-                        <h4 class="text-white font-bold text-sm truncate leading-tight">BUL-AMAÇ</h4>
-                        <p class="text-[11px] text-gray-400 mt-1">Albüm (10 Şarkı)</p>
+                <!-- BUL-AMAÇ (Tam genişlik veya grid içinde) -->
+                <div onclick="openModal(3)" class="glass-card rounded-2xl p-3 cursor-pointer group flex flex-col h-full col-span-2">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 rounded-xl overflow-hidden bg-slate-800 shadow-lg flex-shrink-0">
+                            <img src="https://lh3.googleusercontent.com/8RBj1GgAUioFU4w-A8vQkoNuX4-LGK5dqLs_PbvX52_EL4_uxl1ASEW_H6t-JsbSWDC_8lxk7b6jxSiN=w544-h544-l90-rj" 
+                                 class="w-full h-full object-cover"
+                                 referrerpolicy="no-referrer">
+                        </div>
+                        <div>
+                            <h4 class="text-white font-bold text-sm truncate leading-tight">BUL-AMAÇ</h4>
+                            <p class="text-[11px] text-gray-400 mt-1">Albüm (10 Şarkı)</p>
+                        </div>
                     </div>
                 </div>
 
@@ -219,7 +233,7 @@
                 <i class="fas fa-podcast text-purple-400 mr-2.5"></i> Podcast
             </h3>
 
-            <div onclick="openModal(3)" class="glass-card rounded-2xl p-3.5 cursor-pointer group flex items-center gap-4 active:scale-[0.99]">
+            <div onclick="openModal(4)" class="glass-card rounded-2xl p-3.5 cursor-pointer group flex items-center gap-4 active:scale-[0.99]">
                 <div class="w-16 h-16 flex-shrink-0 rounded-xl overflow-hidden bg-slate-800 shadow-md">
                     <img src="https://ugc.production.linktr.ee/09d11c81-8568-4206-afb8-164f914ccff9_ab6765630000ba8a742729d7e16ead736b1d7087.jpeg" class="w-full h-full object-cover">
                 </div>
@@ -327,10 +341,6 @@
 
         function animate() {
             ctx.clearRect(0, 0, width, height);
-            // Hafif iz bırakmak için (isteğe bağlı)
-            // ctx.fillStyle = 'rgba(5, 5, 5, 0.1)';
-            // ctx.fillRect(0, 0, width, height);
-            
             waves.forEach(wave => wave.draw());
             requestAnimationFrame(animate);
         }
@@ -343,9 +353,20 @@
         // --- VERİLER ---
         const content = [
             {
-                // ID: 0 (Preview Alanı)
-                title: "Sessizlikten Güç Alan",
+                // ID: 0 (Hero - Yeni Şarkı)
+                title: "Bataklığın Aynası",
                 type: "Yeni Single",
+                // Placeholder: Bataklık/Ayna temalı
+                image: "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/72/7a/42/727a42c6-3b97-3d3c-44e3-0d48aaec3c94/artwork.jpg/316x316bb.webp",
+                links: [
+                    { name: "Spotify", url: "https://open.spotify.com/intl-tr/track/7F8ssEgCdtPVrqkfxF5ECr?si=98992629b45a4866", class: "btn-spotify", icon: "spotify" },
+                    { name: "Apple Music", url: "https://music.apple.com/us/song/batakl%C4%B1%C4%9F%C4%B1n-aynas%C4%B1/1866394120", class: "btn-apple", icon: "apple" }
+                ]
+            },
+            {
+                // ID: 1
+                title: "Sessizlikten Güç Alan",
+                type: "Single",
                 image: "https://lh3.googleusercontent.com/dYeW5NjtGcarXEIJx-PyqBsg2VSg-Mnww8mZzzxxjUqwL8hA8RxyvG106r-vEiYEFU6JlEsFkj4-MQB7=w544-h544-l90-rj",
                 links: [
                     { name: "YouTube Music", url: "https://music.youtube.com/playlist?list=OLAK5uy_lNSEOQHCtIB3tUA5tXuKICjLdJGhO91tA", class: "btn-youtube", icon: "youtube" },
@@ -354,7 +375,7 @@
                 ]
             },
             {
-                // ID: 1
+                // ID: 2
                 title: "Anahtar",
                 type: "Single",
                 image: "https://lh3.googleusercontent.com/gRxDFTYvaBtru6OS8l4NjbyBKv6NtGUIvuOU-XrIu01fkcMVgVZNU4eXEAIbYgCZrk17pWXWyGJGPxA=w544-h544-l90-rj",
@@ -365,7 +386,7 @@
                 ]
             },
             {
-                // ID: 2
+                // ID: 3
                 title: "BUL-AMAÇ",
                 type: "Albüm",
                 image: "https://lh3.googleusercontent.com/8RBj1GgAUioFU4w-A8vQkoNuX4-LGK5dqLs_PbvX52_EL4_uxl1ASEW_H6t-JsbSWDC_8lxk7b6jxSiN=w544-h544-l90-rj",
@@ -376,7 +397,7 @@
                 ]
             },
             {
-                // ID: 3
+                // ID: 4
                 title: "AI & Music",
                 type: "Podcast",
                 image: "https://ugc.production.linktr.ee/09d11c81-8568-4206-afb8-164f914ccff9_ab6765630000ba8a742729d7e16ead736b1d7087.jpeg",
