@@ -319,15 +319,16 @@
 
             const socialHTML = [];
             const socialMap = {
-                instagram: { icon: 'fab fa-instagram', hover: '#E1306C' },
-                youtube: { icon: 'fab fa-youtube', hover: '#FF0000' },
-                spotify: { icon: 'fab fa-spotify', hover: '#1DB954' },
-                apple: { icon: 'fab fa-apple', hover: '#FA243C' }
+                instagram: { icon: 'fab fa-instagram', hover: '#E1306C', name: 'Instagram' },
+                youtube: { icon: 'fab fa-youtube', hover: '#FF0000', name: 'YouTube' },
+                youtubemusic: { icon: 'fas fa-play-circle', hover: '#FF0000', name: 'YouTube Music' },
+                spotify: { icon: 'fab fa-spotify', hover: '#1DB954', name: 'Spotify' },
+                apple: { icon: 'fab fa-apple', hover: '#FA243C', name: 'Apple Music' }
             };
 
             for (const [key, url] of Object.entries(artist.social)) {
                 if (url && socialMap[key]) {
-                    socialHTML.push(`<a href="${url}" target="_blank" class="text-gray-400 hover:text-[${socialMap[key].hover}] transition active:scale-90"><i class="${socialMap[key].icon}"></i></a>`);
+                    socialHTML.push(`<a href="${url}" target="_blank" title="${socialMap[key].name}" class="text-gray-400 hover:text-[${socialMap[key].hover}] transition active:scale-90"><i class="${socialMap[key].icon}"></i></a>`);
                 }
             }
             document.getElementById('social-links').innerHTML = socialHTML.join('');
