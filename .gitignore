@@ -1,3 +1,5 @@
 # Sadece PC'de kalacak dosyalar
 admin.html
 server.bat
+server.py
+github_push.bat

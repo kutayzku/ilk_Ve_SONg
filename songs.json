@@ -1,7 +1,7 @@
 {
   "artist": {
     "name": "İlk Ve SONg",
-    "bio": "Şarkı yazmaya ilgi duyuyordum. Suno.AI ve duygularımla hazırladım. 13 şarkı ürettim. Şarkılarımı farklı platformlardan dinleyebilirsiniz.",
+    "bio": "Şarkı yazmaya ilgi duyuyordum. Suno.AI ve duygularımla hazırladım. 16 şarkı ürettim. Şarkılarımı farklı platformlardan dinleyebilirsiniz.",
     "avatar": "https://ugc.production.linktr.ee/316f67df-006a-4f97-9065-f792d5ae41ab_Logo--VS.jpeg",
     "social": {
       "instagram": "https://instagram.com/kutay_aydemirr",
@@ -12,17 +12,63 @@
   },
   "songs": [
     {
-      "id": "batakligin-aynasi",
-      "title": "Bataklığın Aynası",
+      "id": "dün-benim-kendi-i-zim-olsun",
+      "title": "DÜN – Benim Kendi İzim Olsun",
       "type": "Single",
-      "image": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/72/7a/42/727a42c6-3b97-3d3c-44e3-0d48aaec3c94/artwork.jpg/316x316bb.webp",
+      "layout": "square",
+      "image": "https://s3.amazonaws.com/gather.fandalism.com/800x800%2D8527220%2D%2DF25A95B4%2DE1FB%2D4C30%2D98DD6FB4BB84C958%2D%2D0%2D%2D9118083%2D%2DkapakDN%2Ejpg",
       "isNew": true,
       "isFeatured": true,
       "category": "music",
       "links": {
+        "spotify": "https://open.spotify.com/intl-tr/track/7g6jlVlgDeIt2Im9yjecBj?si=29ef6a81c4704db8",
+        "apple": "",
+        "youtube": "https://music.youtube.com/watch?v=LU-9iuDq2LI&si=t2STT5QWsijNUYzB"
+      }
+    },
+    {
+      "id": "o-bendim-o-problem",
+      "title": "O bendim O problem",
+      "type": "Single",
+      "layout": "square",
+      "image": "https://s3.amazonaws.com/gather.fandalism.com/800x800%2D8527220%2D%2DD3A43D57%2DFF63%2D452B%2D930FEF96B04039A5%2D%2D0%2D%2D9132342%2D%2DObendimOproblemKapak%2Ejpg",
+      "isNew": false,
+      "isFeatured": false,
+      "category": "music",
+      "links": {
+        "spotify": "https://open.spotify.com/intl-tr/track/709DxIJTi0OBCwhkNvNXMW?si=e07f40cca3f3419e",
+        "apple": "https://music.apple.com/ca/song/o-bendim-o-problem/1890791861",
+        "youtube": "https://music.youtube.com/watch?v=OZIJt2KOqJQ&si=s5Fiov5ohFY15NhK"
+      }
+    },
+    {
+      "id": "hiçliğin-sihirbazı",
+      "title": "Hiçliğin Sihirbazı",
+      "type": "Single",
+      "layout": "square",
+      "image": "https://s3.amazonaws.com/gather.fandalism.com/800x800%2D8527220%2D%2D734EBD6E%2D7CD8%2D4A1F%2D924DF329267CB0CC%2D%2D0%2D%2D6495815%2D%2DHiliinSihirbazKapak%2Ejpg",
+      "isNew": false,
+      "isFeatured": false,
+      "category": "music",
+      "links": {
+        "spotify": "https://open.spotify.com/intl-tr/track/1AK4wfSgClgi9s8kjhpTGE?si=a8700b9c00d94733",
+        "apple": "https://music.apple.com/ca/song/hi%C3%A7li%C4%9Fin-sihirbaz%C4%B1/1890791798",
+        "youtube": "https://music.youtube.com/watch?v=oOWK5fg_zl8&si=1lJfSsPMSOmN6fDv"
+      }
+    },
+    {
+      "id": "bataklığın-aynası",
+      "title": "Bataklığın Aynası",
+      "type": "Single",
+      "layout": "square",
+      "image": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/72/7a/42/727a42c6-3b97-3d3c-44e3-0d48aaec3c94/artwork.jpg/316x316bb.webp",
+      "isNew": false,
+      "isFeatured": false,
+      "category": "music",
+      "links": {
         "spotify": "https://open.spotify.com/intl-tr/track/7F8ssEgCdtPVrqkfxF5ECr?si=98992629b45a4866",
         "apple": "https://music.apple.com/us/song/batakl%C4%B1%C4%9F%C4%B1n-aynas%C4%B1/1866394120",
-        "youtube": ""
+        "youtube": "https://music.youtube.com/watch?v=GqtUfpiMU2Q&si=dspdm0uz5Zwy1jJh"
       }
     },
     {
@@ -43,6 +89,7 @@
       "id": "anahtar",
       "title": "Anahtar",
       "type": "Single",
+      "layout": "wide",
       "image": "https://lh3.googleusercontent.com/gRxDFTYvaBtru6OS8l4NjbyBKv6NtGUIvuOU-XrIu01fkcMVgVZNU4eXEAIbYgCZrk17pWXWyGJGPxA=w544-h544-l90-rj",
       "isNew": false,
       "isFeatured": false,
