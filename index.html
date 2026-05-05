@@ -362,7 +362,7 @@
                     <div class="hero-preview group overflow-hidden" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(18, 2, 2, 0.95)), url('${song.image}');">
                         ${song.isNew ? `<div class="absolute top-4 left-4 bg-red-600/90 backdrop-blur-md text-white text-[10px] font-bold px-3 py-1.5 rounded-full shadow-lg z-10 animate-pulse border border-white/20 tracking-wider">YENİ ÇIKTI</div>` : ''}
                         <div class="absolute bottom-0 left-0 w-full p-6 text-left z-10">
-                            <h2 class="text-3xl lg:text-4xl text-white mb-2 drop-shadow-xl leading-none font-bold">${song.title.replace(/ /g, '<br>')}</h2>
+                            <h2 class="text-3xl lg:text-4xl text-white mb-2 drop-shadow-xl leading-tight font-bold max-w-full truncate whitespace-normal line-clamp-2">${song.title}</h2>
                             <p class="text-gray-300 text-sm font-medium mb-5">${song.isNew ? 'Yeni ' : ''}${song.type}</p>
                             <button class="bg-[#D2E823] text-black font-bold py-3.5 px-8 rounded-full flex items-center gap-2 transition shadow-lg shadow-[#d2e823]/20 text-sm">
                                 <i class="fas fa-play text-xs"></i> DİNLE
