@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>İlk Ve SONg | Müzik</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome İkonları -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Archivo+Black&display=swap&subset=latin-ext" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #050505;
+            color: #e2e8f0;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1, h2, h3 { font-family: 'Archivo Black', sans-serif; }
+
+        /* --- CANVAS ARKA PLAN --- */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: #050505;
+        }
+
+        /* --- DÖNEN RENKLİ ŞERİT (YENİ ŞARKI İÇİN) --- */
+        .rotating-border-wrapper {
+            position: relative;
+            border-radius: 1.5rem; 
+            overflow: hidden;
+            padding: 3px; 
+            box-shadow: 0 0 25px rgba(210, 232, 35, 0.15); 
+        }
+
+        .rotating-border-wrapper::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: conic-gradient(
+                transparent, 
+                #D2E823, 
+                #ff0055, 
+                #8A2BE2,
+                #D2E823, 
+                transparent
+            );
+            animation: rotate-border 4s linear infinite;
+        }
+
+        @keyframes rotate-border {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hero-preview {
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            border-radius: 1.3rem; 
+            height: 100%;
+            width: 100%;
+            z-index: 1; 
+        }
+
+        /* Glassmorphism */
+        .glass-card {
+            background: rgba(20, 20, 20, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease, background 0.3s ease;
+        }
+        .glass-card:active { transform: scale(0.96); background: rgba(255, 255, 255, 0.1); }
+
+        /* Modal Stilleri */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 50;
+            opacity: 0; visibility: hidden;
+            transition: all 0.3s ease;
+            display: flex; align-items: flex-end;
+            justify-content: center;
+        }
+        @media (min-width: 640px) { .modal-overlay { align-items: center; } }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+
+        .modal-content {
+            background: #1a1a1a;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+            width: 100%;
+            border-radius: 24px 24px 0 0;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        @media (min-width: 640px) {
+            .modal-content { width: auto; min-width: 380px; border-radius: 24px; transform: translateY(20px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        }
+        .modal-overlay.active .modal-content { transform: translateY(0); }
+
+        /* Platform Butonları */
+        .platform-btn {
+            display: flex; align-items: center; justify-content: center;
+            gap: 10px; width: 100%; padding: 16px;
+            border-radius: 16px; font-weight: 600; font-size: 15px;
+            transition: transform 0.2s;
+            text-decoration: none;
+        }
+        .platform-btn:active { transform: scale(0.98); opacity: 0.9; }
+        
+        .btn-spotify { background: #1DB954; color: black; }
+        .btn-apple { background: #FA243C; color: white; }
+        .btn-youtube { background: #FF0000; color: white; }
+
+        /* Loading skeleton */
+        .skeleton {
+            background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 1rem;
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- CANVAS ARKA PLAN -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Header -->
+    <header id="site-header" class="pt-10 pb-6 text-center px-4 relative z-10">
+        <div class="w-28 h-28 mx-auto rounded-full p-1 border-2 border-white/20 mb-5 shadow-2xl overflow-hidden backdrop-blur-sm bg-white/5">
+            <img id="artist-avatar" src="" class="w-full h-full object-cover rounded-full">
+        </div>
+        <h1 id="artist-name" class="text-3xl lg:text-4xl font-bold text-white mb-3 tracking-wide drop-shadow-md"></h1>
+        <p id="artist-bio" class="text-sm text-gray-300 max-w-xs mx-auto font-light leading-relaxed opacity-90"></p>
+        
+        <!-- Sosyal Medya -->
+        <div id="social-links" class="flex gap-6 justify-center mt-6 text-2xl"></div>
+    </header>
+
+    <main class="flex-grow container mx-auto px-4 pb-20 max-w-lg space-y-10 relative z-10">
+        
+        <!-- HERO CARD (Featured) -->
+        <div id="hero-section"></div>
+
+        <!-- MY MUSIC SECTION -->
+        <div id="music-section">
+            <h3 class="text-white text-lg font-bold mb-4 flex items-center pl-1">
+                <i class="fas fa-music text-[#D2E823] mr-2.5"></i> My Music
+            </h3>
+            <div id="music-grid" class="grid grid-cols-2 gap-4">
+                <!-- Loading skeletons -->
+                <div class="skeleton aspect-square"></div>
+                <div class="skeleton aspect-square"></div>
+            </div>
+        </div>
+
+        <!-- PODCAST SECTION -->
+        <div id="podcast-section" style="display:none;">
+            <h3 class="text-white text-lg font-bold mb-4 flex items-center pl-1">
+                <i class="fas fa-podcast text-purple-400 mr-2.5"></i> Podcast
+            </h3>
+            <div id="podcast-list"></div>
+        </div>
+
+    </main>
+
+    <!-- MOBİL UYUMLU MODAL -->
+    <div id="music-modal" class="modal-overlay" onclick="closeModal(event)">
+        <div class="modal-content p-6 pb-10 text-center relative shadow-2xl" onclick="event.stopPropagation()">
+            
+            <div class="w-12 h-1.5 bg-white/20 rounded-full mx-auto mb-6"></div>
+            
+            <button onclick="closeModalDirect()" class="absolute top-5 right-5 w-8 h-8 bg-white/5 rounded-full text-gray-400 hover:text-white flex items-center justify-center active:bg-white/10">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <div class="w-36 h-36 mx-auto rounded-2xl shadow-2xl overflow-hidden mb-5 border border-white/10 relative bg-slate-800">
+                <img id="modal-img" src="" class="w-full h-full object-cover" referrerpolicy="no-referrer">
+            </div>
+            
+            <h3 id="modal-title" class="text-2xl font-bold text-white mb-1 leading-tight">Şarkı Adı</h3>
+            <p id="modal-type" class="text-xs text-[#D2E823] uppercase tracking-widest mb-8 font-bold opacity-80">Single</p>
+
+            <div class="space-y-3" id="modal-links">
+                <!-- Butonlar JS -->
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="text-center text-gray-600 text-[10px] py-6 mb-safe relative z-10">
+        &copy; 2025 İlk Ve SONg
+    </footer>
+
+    <script>
+        // --- CANVAS ARKA PLAN ANİMASYONU ---
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        let width, height;
+        let waves = [];
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            initWaves();
+        }
+
+        class Wave {
+            constructor(y, color, amplitude, frequency, speed) {
+                this.y = y;
+                this.color = color;
+                this.amplitude = amplitude;
+                this.frequency = frequency;
+                this.speed = speed;
+                this.offset = Math.random() * 100;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.moveTo(0, this.y);
+                for (let i = 0; i < width; i++) {
+                    ctx.lineTo(i, this.y + Math.sin(i * this.frequency + this.offset) * this.amplitude * Math.sin(this.offset * 0.1));
+                }
+                ctx.strokeStyle = this.color;
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+                this.offset += this.speed;
+            }
+        }
+
+        function initWaves() {
+            waves = [];
+            const colors = [
+                'rgba(210, 232, 35, 0.2)',
+                'rgba(255, 0, 85, 0.2)',
+                'rgba(138, 43, 226, 0.2)',
+                'rgba(210, 232, 35, 0.1)',
+                'rgba(255, 0, 85, 0.1)'
+            ];
+
+            const totalWaves = 12;
+            const step = height / totalWaves;
+
+            for (let i = 0; i < totalWaves; i++) {
+                waves.push(new Wave(
+                    i * step + 50,
+                    colors[i % colors.length],
+                    Math.random() * 80 + 20,
+                    Math.random() * 0.003 + 0.001,
+                    Math.random() * 0.02 + 0.01
+                ));
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            waves.forEach(wave => wave.draw());
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+        animate();
+
+
+        // --- VERİ YÜKLEME (songs.json) ---
+        let allSongs = [];
+
+        async function loadData() {
+            try {
+                const response = await fetch('songs.json');
+                if (!response.ok) throw new Error('songs.json yüklenemedi');
+                const data = await response.json();
+                
+                renderArtist(data.artist);
+                allSongs = data.songs;
+                renderContent(data.songs);
+            } catch (error) {
+                console.error('Veri yükleme hatası:', error);
+                document.getElementById('music-grid').innerHTML = `
+                    <div class="col-span-2 text-center py-10 text-gray-500">
+                        <i class="fas fa-exclamation-triangle text-3xl mb-3 text-yellow-500/50"></i>
+                        <p class="text-sm">Veriler yüklenirken bir hata oluştu.</p>
+                        <p class="text-xs mt-1 opacity-60">${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // --- SANATÇI BİLGİLERİ ---
+        function renderArtist(artist) {
+            document.getElementById('artist-avatar').src = artist.avatar;
+            document.getElementById('artist-name').textContent = artist.name;
+            document.getElementById('artist-bio').textContent = artist.bio;
+
+            const socialHTML = [];
+            const socialMap = {
+                instagram: { icon: 'fab fa-instagram', hover: '#E1306C' },
+                youtube: { icon: 'fab fa-youtube', hover: '#FF0000' },
+                spotify: { icon: 'fab fa-spotify', hover: '#1DB954' },
+                apple: { icon: 'fab fa-apple', hover: '#FA243C' }
+            };
+
+            for (const [key, url] of Object.entries(artist.social)) {
+                if (url && socialMap[key]) {
+                    socialHTML.push(`<a href="${url}" target="_blank" class="text-gray-400 hover:text-[${socialMap[key].hover}] transition active:scale-90"><i class="${socialMap[key].icon}"></i></a>`);
+                }
+            }
+            document.getElementById('social-links').innerHTML = socialHTML.join('');
+        }
+
+        // --- İÇERİK RENDER ---
+        function renderContent(songs) {
+            const musicSongs = songs.filter(s => s.category === 'music');
+            const podcasts = songs.filter(s => s.category === 'podcast');
+            const featured = songs.find(s => s.isFeatured);
+
+            // Hero Section
+            if (featured) {
+                renderHero(featured);
+            }
+
+            // Music Grid
+            const nonFeaturedMusic = musicSongs.filter(s => !s.isFeatured);
+            renderMusicGrid(nonFeaturedMusic);
+
+            // Podcasts
+            if (podcasts.length > 0) {
+                document.getElementById('podcast-section').style.display = '';
+                renderPodcasts(podcasts);
+            }
+        }
+
+        function renderHero(song) {
+            const index = allSongs.indexOf(song);
+            const heroHTML = `
+                <div class="rotating-border-wrapper aspect-[4/3] w-full shadow-2xl cursor-pointer active:scale-[0.98] transition duration-200" onclick="openModal(${index})">
+                    <div class="hero-preview group overflow-hidden" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(18, 2, 2, 0.95)), url('${song.image}');">
+                        ${song.isNew ? `<div class="absolute top-4 left-4 bg-red-600/90 backdrop-blur-md text-white text-[10px] font-bold px-3 py-1.5 rounded-full shadow-lg z-10 animate-pulse border border-white/20 tracking-wider">YENİ ÇIKTI</div>` : ''}
+                        <div class="absolute bottom-0 left-0 w-full p-6 text-left z-10">
+                            <h2 class="text-3xl lg:text-4xl text-white mb-2 drop-shadow-xl leading-none font-bold">${song.title.replace(/ /g, '<br>')}</h2>
+                            <p class="text-gray-300 text-sm font-medium mb-5">${song.isNew ? 'Yeni ' : ''}${song.type}</p>
+                            <button class="bg-[#D2E823] text-black font-bold py-3.5 px-8 rounded-full flex items-center gap-2 transition shadow-lg shadow-[#d2e823]/20 text-sm">
+                                <i class="fas fa-play text-xs"></i> DİNLE
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('hero-section').innerHTML = heroHTML;
+        }
+
+        function renderMusicGrid(songs) {
+            const grid = document.getElementById('music-grid');
+            
+            // Albums get full width (col-span-2), singles get half width
+            let html = '';
+            songs.forEach(song => {
+                const index = allSongs.indexOf(song);
+                const isAlbum = song.type === 'Albüm' || song.type === 'EP';
+
+                if (isAlbum) {
+                    // Full width album card (horizontal layout)
+                    html += `
+                        <div onclick="openModal(${index})" class="glass-card rounded-2xl p-3 cursor-pointer group flex flex-col h-full col-span-2">
+                            <div class="flex items-center gap-4">
+                                <div class="w-16 h-16 rounded-xl overflow-hidden bg-slate-800 shadow-lg flex-shrink-0">
+                                    <img src="${song.image}" class="w-full h-full object-cover" referrerpolicy="no-referrer" onerror="this.src='https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=200'">
+                                </div>
+                                <div>
+                                    <h4 class="text-white font-bold text-sm truncate leading-tight">${song.title}</h4>
+                                    <p class="text-[11px] text-gray-400 mt-1">${song.type}${song.subtitle ? ' (' + song.subtitle + ')' : ''}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    // Half width single card (vertical layout)
+                    html += `
+                        <div onclick="openModal(${index})" class="glass-card rounded-2xl p-3 cursor-pointer group flex flex-col h-full">
+                            <div class="aspect-square rounded-xl overflow-hidden mb-3 relative bg-slate-800 shadow-lg">
+                                <img src="${song.image}" class="w-full h-full object-cover" referrerpolicy="no-referrer" onerror="this.src='https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=200'">
+                            </div>
+                            <div class="mt-auto">
+                                <h4 class="text-white font-bold text-sm truncate leading-tight">${song.title}</h4>
+                                <p class="text-[11px] text-gray-400 mt-1">${song.type}</p>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            grid.innerHTML = html;
+        }
+
+        function renderPodcasts(podcasts) {
+            const list = document.getElementById('podcast-list');
+            let html = '';
+
+            podcasts.forEach(podcast => {
+                const index = allSongs.indexOf(podcast);
+                html += `
+                    <div onclick="openModal(${index})" class="glass-card rounded-2xl p-3.5 cursor-pointer group flex items-center gap-4 active:scale-[0.99] mb-3">
+                        <div class="w-16 h-16 flex-shrink-0 rounded-xl overflow-hidden bg-slate-800 shadow-md">
+                            <img src="${podcast.image}" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=200'">
+                        </div>
+                        <div class="flex-grow min-w-0">
+                            <h4 class="text-white font-bold text-sm truncate">${podcast.title}</h4>
+                            <p class="text-xs text-gray-400 mt-0.5">${podcast.subtitle || podcast.type}</p>
+                        </div>
+                        <div class="pr-2 text-gray-500">
+                            <i class="fas fa-chevron-right text-sm"></i>
+                        </div>
+                    </div>
+                `;
+            });
+
+            list.innerHTML = html;
+        }
+
+
+        // --- MODAL FONKSİYONLARI ---
+        const modal = document.getElementById('music-modal');
+        const modalImg = document.getElementById('modal-img');
+        const modalTitle = document.getElementById('modal-title');
+        const modalType = document.getElementById('modal-type');
+        const modalLinks = document.getElementById('modal-links');
+
+        function openModal(index) {
+            const item = allSongs[index];
+            if (!item) return;
+
+            modalImg.src = item.image;
+            modalImg.setAttribute('referrerpolicy', 'no-referrer');
+            modalImg.onerror = function() {
+                this.src = 'https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=1000&auto=format&fit=crop';
+            };
+
+            modalTitle.textContent = item.title;
+            modalType.textContent = item.type;
+            
+            const platformMap = {
+                spotify: { name: 'Spotify', class: 'btn-spotify', icon: 'spotify' },
+                apple: { name: 'Apple Music', class: 'btn-apple', icon: 'apple' },
+                youtube: { name: 'YouTube Music', class: 'btn-youtube', icon: 'youtube' }
+            };
+
+            let linksHTML = '';
+            for (const [key, url] of Object.entries(item.links)) {
+                if (url && platformMap[key]) {
+                    const p = platformMap[key];
+                    linksHTML += `
+                        <a href="${url}" target="_blank" class="platform-btn ${p.class}">
+                            <i class="fab fa-${p.icon} text-lg"></i> ${p.name}
+                        </a>
+                    `;
+                }
+            }
+
+            modalLinks.innerHTML = linksHTML;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; 
+        }
+
+        function closeModal(e) {
+            if (e.target === modal) {
+                closeModalDirect();
+            }
+        }
+
+        function closeModalDirect() {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // --- BAŞLAT ---
+        loadData();
+    </script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+{
+  "artist": {
+    "name": "İlk Ve SONg",
+    "bio": "Şarkı yazmaya ilgi duyuyordum. Suno.AI ve duygularımla hazırladım. 13 şarkı ürettim. Şarkılarımı farklı platformlardan dinleyebilirsiniz.",
+    "avatar": "https://ugc.production.linktr.ee/316f67df-006a-4f97-9065-f792d5ae41ab_Logo--VS.jpeg",
+    "social": {
+      "instagram": "https://instagram.com/kutay_aydemirr",
+      "youtube": "https://www.youtube.com/@%C4%B0lkVeSONg",
+      "spotify": "https://open.spotify.com/intl-tr/artist/3CoY9uZDaTpPVqgIPWkznE",
+      "apple": "https://music.apple.com/tr/artist/i-lk-ve-song/1819947370"
+    }
+  },
+  "songs": [
+    {
+      "id": "batakligin-aynasi",
+      "title": "Bataklığın Aynası",
+      "type": "Single",
+      "image": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/72/7a/42/727a42c6-3b97-3d3c-44e3-0d48aaec3c94/artwork.jpg/316x316bb.webp",
+      "isNew": true,
+      "isFeatured": true,
+      "category": "music",
+      "links": {
+        "spotify": "https://open.spotify.com/intl-tr/track/7F8ssEgCdtPVrqkfxF5ECr?si=98992629b45a4866",
+        "apple": "https://music.apple.com/us/song/batakl%C4%B1%C4%9F%C4%B1n-aynas%C4%B1/1866394120",
+        "youtube": ""
+      }
+    },
+    {
+      "id": "sessizlikten-guc-alan",
+      "title": "Sessizlikten Güç Alan",
+      "type": "Single",
+      "image": "https://lh3.googleusercontent.com/dYeW5NjtGcarXEIJx-PyqBsg2VSg-Mnww8mZzzxxjUqwL8hA8RxyvG106r-vEiYEFU6JlEsFkj4-MQB7=w544-h544-l90-rj",
+      "isNew": false,
+      "isFeatured": false,
+      "category": "music",
+      "links": {
+        "spotify": "https://open.spotify.com/intl-tr/track/40IzPGoIP4zELUaOy2N4vk?si=b547799f7b4948c2",
+        "apple": "https://music.apple.com/tr/song/sessizlikten-g%C3%BC%C3%A7-alan/1865161374",
+        "youtube": "https://music.youtube.com/playlist?list=OLAK5uy_lNSEOQHCtIB3tUA5tXuKICjLdJGhO91tA"
+      }
+    },
+    {
+      "id": "anahtar",
+      "title": "Anahtar",
+      "type": "Single",
+      "image": "https://lh3.googleusercontent.com/gRxDFTYvaBtru6OS8l4NjbyBKv6NtGUIvuOU-XrIu01fkcMVgVZNU4eXEAIbYgCZrk17pWXWyGJGPxA=w544-h544-l90-rj",
+      "isNew": false,
+      "isFeatured": false,
+      "category": "music",
+      "links": {
+        "spotify": "https://open.spotify.com/track/1kI2Ep4LzOQZfydsCv72vS",
+        "apple": "https://music.apple.com/us/song/anahtar/1823520726",
+        "youtube": "https://music.youtube.com/watch?v=4kzQy3QlP6k"
+      }
+    },
+    {
+      "id": "bul-amac",
+      "title": "BUL-AMAÇ",
+      "type": "Albüm",
+      "subtitle": "10 Şarkı",
+      "image": "https://lh3.googleusercontent.com/8RBj1GgAUioFU4w-A8vQkoNuX4-LGK5dqLs_PbvX52_EL4_uxl1ASEW_H6t-JsbSWDC_8lxk7b6jxSiN=w544-h544-l90-rj",
+      "isNew": false,
+      "isFeatured": false,
+      "category": "music",
+      "links": {
+        "spotify": "https://open.spotify.com/intl-tr/album/2D9GUljPVt5I4N3tnJDh0L",
+        "apple": "https://music.apple.com/us/album/bul-amaç/1820238840",
+        "youtube": "https://music.youtube.com/playlist?list=OLAK5uy_mnO_MDpMNji2mcxd3-OxNgkbuDgbl7Zms"
+      }
+    },
+    {
+      "id": "ai-music-podcast",
+      "title": "AI & Music",
+      "type": "Podcast",
+      "subtitle": "Konuk Bölüm",
+      "image": "https://ugc.production.linktr.ee/09d11c81-8568-4206-afb8-164f914ccff9_ab6765630000ba8a742729d7e16ead736b1d7087.jpeg",
+      "isNew": false,
+      "isFeatured": false,
+      "category": "podcast",
+      "links": {
+        "spotify": "https://open.spotify.com/episode/47ZGg9QMk4IOdYR7OtHZlO",
+        "apple": "",
+        "youtube": ""
+      }
+    }
+  ]
+}
